@@ -66,6 +66,29 @@ let getClickedHourAngle = (event) => {
     return atan2(x, y)
 }
 
+let mousedownCallback = (event) => {
+    reteLastClickedHourAngle = getClickedHourAngle(event)
+}
+
+let mousemoveCallback = (event) => {
+    if (reteLastClickedHourAngle !== null) {
+        let clickedHourAngle = getClickedHourAngle(event)
+        reteRotation += clickedHourAngle - reteLastClickedHourAngle
+        rete.setAttribute("transform", `rotate(${deg(reteRotation)} 300 300)`)
+        reteLastClickedHourAngle = clickedHourAngle
+    } else if (ruleLastClickedHourAngle !== null) {
+        let clickedHourAngle = getClickedHourAngle(event)
+        ruleRotation += clickedHourAngle - ruleLastClickedHourAngle
+        rule.setAttribute("transform", `rotate(${deg(ruleRotation)} 300 300)`)
+        ruleLastClickedHourAngle = clickedHourAngle
+    }
+}
+
+let mouseupCallback = (event) => {
+    reteLastClickedHourAngle = null
+    ruleLastClickedHourAngle = null
+}
+
 let plotAlmucantar = (a) => {
     let points = []
     for (let i = 0; i <= 360; i++) {
@@ -351,16 +374,8 @@ let plotRete = () => {
 
 let plotRule = () => {
     rule = subElement(astrolabe, "g", {})
-    // events
-    rule.addEventListener("mousedown", (event) => {
-        ruleLastClickedHourAngle = getClickedHourAngle(event)
-        event.stopPropagation()
-    })
-    rule.addEventListener("mousemove", (event) => {
-    })
-    rule.addEventListener("mouseup", (event) => {
-        ruleLastClickedHourAngle = null
-    })
+    rule.addEventListener("mousedown", ruleMousedownCallback)
+    rule.addEventListener("touchstart", ruleMousedownCallback)
     // shape
     let d = "M 0 300"
     d += " A 25 25 0 0 1 25 275"
@@ -478,6 +493,11 @@ let plotUnequalHours = () => {
     }
 }
 
+let ruleMousedownCallback = (event) => {
+    ruleLastClickedHourAngle = getClickedHourAngle(event)
+    event.stopPropagation()
+}
+
 let stereographic = (h, delta) => {
     let r = 180.29790050168543 * tan((rad(90) - hemisphere * delta) / 2)
     let x = 300 + r * sin(h)
@@ -493,29 +513,6 @@ let subElement = (parent, tag, attributes) => {
     parent.appendChild(child)
     return child
 }
-
-window.addEventListener("mousedown", (event) => {
-    reteLastClickedHourAngle = getClickedHourAngle(event)
-})
-
-window.addEventListener("mousemove", (event) => {
-    if (reteLastClickedHourAngle !== null) {
-        let clickedHourAngle = getClickedHourAngle(event)
-        reteRotation += clickedHourAngle - reteLastClickedHourAngle
-        rete.setAttribute("transform", `rotate(${deg(reteRotation)} 300 300)`)
-        reteLastClickedHourAngle = clickedHourAngle
-    } else if (ruleLastClickedHourAngle !== null) {
-        let clickedHourAngle = getClickedHourAngle(event)
-        ruleRotation += clickedHourAngle - ruleLastClickedHourAngle
-        rule.setAttribute("transform", `rotate(${deg(ruleRotation)} 300 300)`)
-        ruleLastClickedHourAngle = clickedHourAngle
-    }
-})
-
-window.addEventListener("mouseup", (event) => {
-    reteLastClickedHourAngle = null
-    ruleLastClickedHourAngle = null
-})
 
 document.getElementById("minus-button").addEventListener("click", () => {
     if (hemisphere === 1 && phiDegrees === 0) {
@@ -539,4 +536,10 @@ document.getElementById("plus-button").addEventListener("click", () => {
     }
 })
 
+window.addEventListener("mousedown", mousedownCallback)
+window.addEventListener("touchstart", mousedownCallback)
+window.addEventListener("mousemove", mousemoveCallback)
+window.addEventListener("touchmove", mousemoveCallback)
+window.addEventListener("mouseup", mouseupCallback)
+window.addEventListener("touchend", mouseupCallback)
 plotAstrolabe()
