@@ -61,8 +61,15 @@ let eclipticToEquatorial = (lambda, beta) => {
 
 let getClickedHourAngle = (event) => {
     let rect = astrolabe.getBoundingClientRect()
-    let x = event.clientX - rect.x - 300
-    let y = 300 - event.clientY + rect.y
+    let x
+    let y
+    if (event.type === "mousedown") {
+        x = event.clientX - rect.x - 300
+        y = 300 - event.clientY + rect.y
+    } else {
+        x = event.touches[0].clientX - rect.x - 300
+        y = 300 - event.touches[0].clientY + rect.y
+    }
     return atan2(x, y)
 }
 
