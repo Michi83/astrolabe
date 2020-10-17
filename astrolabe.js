@@ -543,8 +543,8 @@ document.getElementById("plus-button").addEventListener("click", () => {
     }
 })
 
-window.addEventListener("mousedown", mousedownCallback)
-window.addEventListener("touchstart", mousedownCallback)
+astrolabe.addEventListener("mousedown", mousedownCallback)
+astrolabe.addEventListener("touchstart", mousedownCallback)
 window.addEventListener("mousemove", mousemoveCallback)
 window.addEventListener("touchmove", mousemoveCallback)
 window.addEventListener("mouseup", mouseupCallback)
