@@ -63,7 +63,7 @@ let getClickedHourAngle = (event) => {
     let rect = astrolabe.getBoundingClientRect()
     let x
     let y
-    if (event.type === "mousedown") {
+    if (event.type === "mousedown" || event.type === "mousemove") {
         x = event.clientX - rect.x - 300
         y = 300 - event.clientY + rect.y
     } else {
