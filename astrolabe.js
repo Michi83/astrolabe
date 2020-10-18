@@ -48,6 +48,9 @@ let azimuthalToEquatorial = (A, a) => {
     let h = atan2(sin(A) * cos(a),
         sin(a) * cos(phi) + cos(A) * cos(a) * sin(phi))
     let delta = asin(sin(a) * sin(phi) - cos(A) * cos(a) * cos(phi))
+    if (isNaN(delta)) {
+        delta = rad(90) // bugfix for rare rounding error
+    }
     return [h, delta]
 }
 
